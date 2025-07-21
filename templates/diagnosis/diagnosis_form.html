@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Diagnosis{% endblock %}
 {% block content %}
+<div class="container py-3">
 <div class="chat-window d-flex flex-column" id="chat-area">
     {% if user_input %}
     <div class="message user-message">
@@ -10,7 +11,7 @@
 
     {% if predictions %}
 <div class="message bot-message" id="ai-response">
-    <strong>HealthBot:</strong><br>
+    <strong>Health Assitance:</strong><br>
     Based on your symptoms, here's what I found:
 
     <ul>
@@ -28,14 +29,14 @@
 <div class="chat-container">
     {% for chat in chat_history %}
         <div class="user-message"><strong>You:</strong> {{ chat.message }}</div>
-        <div class="bot-response"><strong>Bot:</strong> {{ chat.response|linebreaks }}</div>
+        <div class="bot-response"><strong>Health Assistance:</strong> {{ chat.response|linebreaks }}</div>
     {% endfor %}
 </div>
 
 
     <!-- Typing animation -->
     <div class="message bot-message d-none" id="typing-indicator">
-        <strong>HealthBot is typing</strong><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+        <strong>Health Assistance is typing</strong><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
     </div>
 </div>
 
@@ -48,8 +49,48 @@
         </div>
     </form>
 </div>
-
+</div>
+</div>
 <style>
+    
+.chat-window {
+    height: 70vh;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #110808;
+    border-radius: 8px;
+}
+
+.chat-container .user-message,
+.chat-container .bot-response,
+.message.user-message,
+.message.bot-message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    max-width: 85%;
+    word-wrap: break-word;
+}
+
+.message.user-message,
+.chat-container .user-message {
+    background-color: #070808;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.message.bot-message,
+.chat-container .bot-response {
+    background-color: #f8d7da;
+    align-self: flex-start;
+    margin-right: auto;
+}
+
+.chat-form textarea {
+    resize: none;
+}
+
+
     .dot {
         animation: blink 1s infinite;
     }

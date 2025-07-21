@@ -11,9 +11,10 @@
     <style>
         body {
             background-color: #343541;
-            color: #fff;
+            color: #090505;
             font-family: 'Segoe UI', sans-serif;
         }
+
         .sidebar {
             width: 250px;
             background-color: #202123;
@@ -23,59 +24,91 @@
             top: 0;
             padding: 20px;
             overflow-y: auto;
+            transition: transform 0.3s ease;
         }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
         .main {
             margin-left: 250px;
             padding: 0;
             height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: margin-left 0.3s ease;
         }
+
+        .main.full {
+            margin-left: 0;
+        }
+
         .topbar {
             background-color: #202123;
             padding: 12px 24px;
             border-bottom: 1px solid #3f4042;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
+
         .chat-window {
             flex: 1;
             padding: 24px;
             overflow-y: auto;
         }
+
         .message {
             max-width: 700px;
             margin-bottom: 16px;
             border-radius: 12px;
             padding: 12px 16px;
         }
+
         .user-message {
             background-color: #2e2f31;
             align-self: flex-end;
             margin-left: auto;
         }
+
         .bot-message {
             background-color: #444654;
             align-self: flex-start;
             margin-right: auto;
         }
+
         .chat-form {
             background-color: #343541;
             padding: 16px 24px;
             border-top: 1px solid #3f4042;
         }
+
         textarea {
             background-color: #40414f;
             border: none;
-            color: white;
+            color: rgb(11, 6, 6);
             resize: none;
         }
+
         textarea::placeholder {
             color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main {
+                margin-left: 0;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
+<div class="sidebar d-md-block hidden" id="sidebar">
     <h5 class="text-white">🧠 HealthBot</h5>
     <hr class="text-secondary" />
     <ul class="nav flex-column">
@@ -85,13 +118,23 @@
     </ul>
 </div>
 
-<div class="main">
+<div class="main full" id="main">
     <div class="topbar">
         <h6 class="text-white m-0">AI Symptom Checker</h6>
+        <button class="btn btn-outline-light d-md-none" onclick="toggleSidebar()">☰</button>
     </div>
 
     {% block content %}{% endblock %}
-
 </div>
+
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main');
+        sidebar.classList.toggle('hidden');
+        main.classList.toggle('full');
+    }
+</script>
+
 </body>
 </html>
