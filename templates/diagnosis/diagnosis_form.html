@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block title %}Diagnosis{% endblock %}
+{% block content %}
+<div class="chat-window d-flex flex-column" id="chat-area">
+    {% if user_input %}
+    <div class="message user-message">
+        <strong>You:</strong><br>{{ user_input }}
+    </div>
+    {% endif %}
+
+    {% if predictions %}
+<div class="message bot-message" id="ai-response">
+    <strong>HealthBot:</strong><br>
+    Based on your symptoms, here's what I found:
+
+    <ul>
+        {% for item in predictions %}
+        <li>
+            <strong>{{ item.label }}</strong> ({{ item.confidence }}%)<br>
+            <em>Explanation:</em> {{ item.explanation }}<br>
+            <em>Suggested Remedy:</em> {{ item.remedy }}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<div class="chat-container">
+    {% for chat in chat_history %}
+        <div class="user-message"><strong>You:</strong> {{ chat.message }}</div>
+        <div class="bot-response"><strong>Bot:</strong> {{ chat.response|linebreaks }}</div>
+    {% endfor %}
+</div>
+
+
+    <!-- Typing animation -->
+    <div class="message bot-message d-none" id="typing-indicator">
+        <strong>HealthBot is typing</strong><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+    </div>
+</div>
+
+<div class="chat-form">
+    <form method="POST" id="symptom-form">
+        {% csrf_token %}
+        <div class="input-group">
+            <textarea name="symptoms" rows="2" class="form-control" placeholder="Describe your symptoms...">{{ user_input }}</textarea>
+            <button class="btn btn-light" type="submit">Send</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .dot {
+        animation: blink 1s infinite;
+    }
+    .dot:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    .dot:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    @keyframes blink {
+        0% { opacity: 0; }
+        50% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+
+    
+    .chat-container {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .user-message,
+    .bot-response {
+        max-width: 70%;
+        padding: 10px 15px;
+        border-radius: 15px;
+        word-wrap: break-word;
+    }
+
+    .user-message {
+        align-self: flex-end;
+        background-color: #dcf8c6;
+        border-top-right-radius: 0;
+    }
+
+    .bot-response {
+        align-self: flex-start;
+        background-color: #0c0101;
+        border-top-left-radius: 0;
+    }
+
+    .message.user-message,
+    .message.bot-message {
+        margin: 10px 0;
+        padding: 10px 15px;
+        border-radius: 15px;
+        max-width: 70%;
+    }
+
+    .message.user-message {
+        background-color: #0d1a02;
+        align-self: flex-end;
+        border-top-right-radius: 0;
+    }
+
+    .message.bot-message {
+        background-color: #0d1a02;
+        align-self: flex-start;
+        border-top-left-radius: 0;
+    }
+
+    .chat-window {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chat-form {
+        margin-top: 20px;
+    }
+
+
+</style>
+
+<script>
+    const form = document.getElementById("symptom-form");
+    const typingIndicator = document.getElementById("typing-indicator");
+
+    form.addEventListener("submit", function () {
+        typingIndicator.classList.remove("d-none");
+    });
+</script>
+{% endblock %}

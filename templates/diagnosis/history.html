@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Diagnosis History{% endblock %}
+{% block content %}
+<div class="chat-window">
+    <h5 class="text-white mb-4">📜 Diagnosis History</h5>
+
+    {% if history %}
+        <div class="list-group">
+            {% for item in history %}
+            <div class="message bot-message">
+                <strong>Date:</strong> {{ item.created_at|date:"M d, Y - H:i" }}<br>
+                <strong>Input:</strong> {{ item.input_text }}<br>
+                <strong>Prediction:</strong> {{ item.prediction }}
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No diagnosis history found.</p>
+    {% endif %}
+</div>
+{% endblock %}
